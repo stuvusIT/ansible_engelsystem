@@ -1,0 +1,14 @@
+---
+- name: Install mariadb
+  package:
+    name: mariadb-server
+    state: latest
+- name: install php mysql driver
+  package:
+    name: php7.0-mysqli
+    state: latest
+  notify: reload nginx
+- name: Install python mysql module
+  package:
+    name: python-mysqldb
+    state: latest

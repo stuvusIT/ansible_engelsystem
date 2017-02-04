@@ -1,0 +1,21 @@
+---
+- name: Install nginx
+  package:
+    name: nginx-full
+    state: latest
+- name: Copy nginx config
+  template:
+    backup: yes
+    dest: /etc/nginx/nginx.conf
+    src: files/nginx.conf
+  notify: reload nginx
+- name: Make sure nginx is enabled and running
+  systemd:
+    name: nginx.service
+    enabled: yes
+    daemon_reload: yes
+    state: started
+- name: install php
+  package:
+    name: php7.0-fpm
+    state: latest
