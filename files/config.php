@@ -1,13 +1,13 @@
 <?php
 
 // Enable maintenance mode (showin a static page)
-$maintenance_mode = false;
+$maintenance_mode = {{ maintenance_mode }};
 
 // URL to the angel faq and job description
-$faq_url = "https://stuvus.uni-stuttgart.de";
+$faq_url = "{{ faq_url }}";
 
 // contact email address, linked on every page
-$contact_email = "mailto:admin@stuvus.uni-stuttgart.de";
+$contact_email = "mailto:{{ contact_email }}";
 
 // Default-Theme auf der Startseite, 1=style1.css usw.
 $default_theme = 1;
@@ -57,7 +57,7 @@ $voucher_settings = [
 // $shift_sum_formula = "SUM(`end` - `start`)";
 
 // For accessing stats
-$api_key = "lb43uliful4isfduklb4gfsbk";
+$api_key = "{{ api_key }}";
 
 // MySQL-Connection Settings
 $config = [
