@@ -30,7 +30,7 @@ define('CRYPT_ALG', '$6$rounds=5000'); // SHA-512
 define('MIN_PASSWORD_LENGTH', 8);
 
 // Wenn Engel beim Registrieren oder in ihrem Profil eine T-Shirt Größe angeben sollen, auf true setzen:
-$enable_tshirt_size = true;
+$enable_tshirt_size = {{ require_thirt_size|default(true) }};
 
 // Number of shifts to freeload until angel is locked for shift signup.
 $max_freeloadable_shifts = 2;
