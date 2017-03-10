@@ -4,36 +4,41 @@
     daemon_reload: yes
     name: nginx.service
     state: reloaded
-  listen: reload nginx
-- name: grant nginx read access
+  listen: Reload nginx
+
+- name: Grant nginx read access
   file:
     path: /opt/engelsystem
     mode: u=rwX,g=rwX,o=rX
     owner: root
     group: root
     recurse: yes
-  listen: engelsystem updated
-- name: grant nginx write access to '/import'
+  listen: Engelsystem updated
+
+- name: Grant nginx write access to '/import'
   file:
     path: /opt/engelsystem/import
     mode: u=rwX,g=rwX,o=rX
     owner: root
     group: www-data
     recurse: yes
-  listen: engelsystem updated
-- name: create engelsystem database
+  listen: Engelsystem updated
+
+- name: Create engelsystem database
   mysql_db:
     login_unix_socket: /var/run/mysqld/mysqld.sock
     name: engelsystem
     state: present
-  listen: engelsystem updated
-- name: install database
+  listen: Engelsystem updated
+
+- name: Install database
   shell: cat /opt/engelsystem/db/install.sql /opt/engelsystem/db/update.sql | mysql -B engelsystem
-  listen: engelsystem updated
-- name: create engelsystem user
+  listen: Engelsystem updated
+
+- name: Create engelsystem user
   mysql_user:
     name: engelsystem
     password: engelsystem
     priv: engelsystem.*:ALL,GRANT
     login_unix_socket: /var/run/mysqld/mysqld.sock
-  listen: engelsystem updated
+  listen: Engelsystem updated

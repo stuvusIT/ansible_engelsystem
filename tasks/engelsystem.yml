@@ -1,13 +1,13 @@
 ---
-- name: clone engelsystem
+- name: Clone Engelsystem
   git:
     recursive: yes
     repo: https://github.com/Scriptkiddi/engelsystem
     dest: /opt/engelsystem
-  notify: engelsystem updated
-- name: Copy engelsystem configuration
+  notify: Engelsystem updated
+
+- name: Create engelsystem configuration
   template:
     backup: yes
     dest: /opt/engelsystem/config/config.php
-    src: files/config.php
-  notify: reload nginx
+    src: config.php.j2
