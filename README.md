@@ -47,12 +47,28 @@ This role requires the [php-fpm role](https://github.com/stuvusIT/php-fpm), the 
 ## Example Playbook
 
 ```yml
-- hosts: wordpress
+- hosts: engelsystem
   roles:
-    - role: wordpress
-      wordpress_mysql_password: password
-      wordpress_default_password: password
-      wordpress_default_email: admin@example.com
+    - role: engelsystem
+      engelsystem_mysql_password: pleasechangethis
+      served_domains:
+        - domains:
+          - helfer.campusbeach.stuvus.uni-stuttgart.de.
+          https: true
+          crypto: true
+          root: /opt/engelsystem/public
+          privkey_path: /etc/ssl/privkey.pem
+          fullchain_path: /etc/ssl/fullchain.pem
+          default_server: true
+          allowed_ip_ranges:
+            - 129.69.139.0/25
+          index_files:
+            - index.php
+          locations:
+            - condition: /
+              content: try_files $uri $uri/ /index.php?$args;
+            - condition: ~ \.php$
+              content: include fastcgi.conf; fastcgi_intercept_errors on; fastcgi_pass unix:/run/php/php7.0-fpm.sock;
 ```
 
 ## License

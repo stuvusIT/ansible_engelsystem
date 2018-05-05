@@ -5,9 +5,7 @@
 
 - name: Install required packages
   apt:
-    name: "{{ item }}"
-  with_items:
-    - composer
+    name: "composer"
 
 - name: Create install folder
   file:
@@ -24,7 +22,6 @@
     depth: 1
     update: true
     version: "{{ engelsystem_version }}"
-  become: yes
   become_user: "{{ engelsystem_user }}"
 
 - name: Run composer install
@@ -55,14 +52,10 @@
   mysql_db:
     state: import
     name: "{{ engelsystem_mysql_database }}"
-    target: "{{ engelsystem_install_path }}/db/install.sql"
-  when: database_created.changed
-
-- name: Import sql files
-  mysql_db:
-    state: import
-    name: "{{ engelsystem_mysql_database }}"
-    target: "{{ engelsystem_install_path }}/db/update.sql"
+    target: "{{ engelsystem_install_path }}/db/{{ item }}.sql"
+  with_items:
+    - install
+    - update
   when: database_created.changed
 
 - name: Copy configuration file
