@@ -1,0 +1,21 @@
+---
+galaxy_info:
+  author: Fritz Otlinghaus
+  description: Role to setup and configure an Engelsystem instance
+  company: stuvus (https://stuvus.uni-stuttgart.de)
+
+  license: CC-BY-SA
+
+  min_ansible_version: 2.4
+
+  platforms:
+    - name: Ubuntu
+      versions:
+        - xenial
+        - bionic
+
+  galaxy_tags:
+    - engelsystem
+    - voluenteers
+
+dependencies: []

@@ -1,0 +1,68 @@
+---
+- name: Add composer repository
+  apt_repository:
+    repo: ppa:jbboehr/composer
+
+- name: Install required packages
+  apt:
+    name: "composer"
+
+- name: Create install folder
+  file:
+    path: "{{ engelsystem_install_path }}"
+    state: directory
+    owner: "{{ engelsystem_user }}"
+    group: "{{ engelsystem_group }}"
+    mode: 0755
+
+- name: Clone repository
+  git:
+    repo: 'https://github.com/engelsystem/engelsystem.git'
+    dest: "{{ engelsystem_install_path }}"
+    depth: 1
+    update: true
+    version: "{{ engelsystem_version }}"
+  become_user: "{{ engelsystem_user }}"
+
+- name: Run composer install
+  composer:
+    command: install
+    working_dir: "{{ engelsystem_install_path }}"
+    no_dev: true
+
+- name: Run composer dump-autoload
+  composer:
+    command: dump-autoload
+    working_dir: "{{ engelsystem_install_path }}"
+
+- name: Create a new database with name '{{ engelsystem_mysql_database }}'
+  mysql_db:
+    name: "{{ engelsystem_mysql_database }}"
+    state: present
+  register: database_created
+
+- name: Create mariadb user
+  mysql_user:
+    name: "{{ engelsystem_mysql_user }}"
+    password: "{{ engelsystem_mysql_password }}"
+    priv: '{{ engelsystem_mysql_database }}.*:ALL,GRANT'
+    state: present
+
+- name: Import sql files
+  mysql_db:
+    state: import
+    name: "{{ engelsystem_mysql_database }}"
+    target: "{{ engelsystem_install_path }}/db/{{ item }}.sql"
+  with_items:
+    - install
+    - update
+  when: database_created.changed
+
+- name: Copy configuration file
+  template:
+    src: config.php.j2
+    dest: "{{ engelsystem_install_path }}/config/config.php"
+    owner: "{{ engelsystem_user }}"
+    group: "{{ engelsystem_group }}"
+    mode: 0660
+

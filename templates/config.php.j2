@@ -1,0 +1,99 @@
+<?php
+
+// To change settings create a config.php
+
+return [
+    // MySQL-Connection Settings
+    'database'                => [
+        'host' => env('MYSQL_HOST', '{{ engelsystem_mysql_host }}'),
+        'user' => env('MYSQL_USER', '{{ engelsystem_mysql_user }}'),
+        'pw'   => env('MYSQL_PASSWORD', '{{ engelsystem_mysql_password }}'),
+        'db'   => env('MYSQL_DATABASE', '{{ engelsystem_mysql_database }}'),
+    ],
+
+    // For accessing stats
+    'api_key'                 => '{{ engelsystem_api_key }}',
+
+    // Enable maintenance mode (show a static page)
+    'maintenance'             => {{ engelsystem_maintenance | lower }},
+
+    // Set to development to enable debugging messages
+    'environment'             => '{{ engelsystem_environment }}',
+
+    // URL to the angel faq and job description
+    'faq_url'                 => '{{ engelsystem_faq_url }}',
+
+    // Contact email address, linked on every page
+    'contact_email'           => '{{ engelsystem_contact_email }}',
+
+    // From address of all emails
+    'no_reply_email'          => '{{ engelsystem_no_reply_email }}',
+
+    // Default theme, 1=style1.css
+    'theme'                   => {{ engelsystem_theme }},
+
+    // Available themes
+    'available_themes'        => [
+"{{ engelsystem_themes | join('", "') }}"
+    ],
+
+    // Number of News shown on one site
+    'display_news'            => {{ engelsystem_display_news }},
+
+    // Users are able to sign up
+    'registration_enabled'    => {{ engelsystem_registration_enabled | lower }},
+
+    // Only arrived angels can sign up for shifts
+    'signup_requires_arrival' => {{ engelsystem_signup_requires_arrival | lower }},
+
+    // Anzahl Stunden bis zum Austragen eigener Schichten
+    'last_unsubscribe'        => {{ engelsystem_last_unsubscribe }},
+
+    // Setzt den zu verwendenden Crypto-Algorithmus (entsprechend der Dokumentation von crypt()).
+    // Falls ein Benutzerpasswort in einem anderen Format gespeichert ist,
+    // wird es bei der ersten Benutzung des Klartext-Passworts in das neue Format
+    // konvertiert.
+    //  MD5         '$1'
+    //  Blowfish    '$2y$13'
+    //  SHA-256     '$5$rounds=5000'
+    //  SHA-512     '$6$rounds=5000'
+    'crypt_alg'               => '{{ engelsystem_crypt_alg }}',
+
+    'min_password_length'     => {{ engelsystem_min_password_length }},
+
+    // Wenn Engel beim Registrieren oder in ihrem Profil eine T-Shirt Größe angeben sollen, auf true setzen:
+    'enable_tshirt_size'      => {{ engelsystem_enable_tshirt_size | lower }},
+
+    // Number of shifts to freeload until angel is locked for shift signup.
+    'max_freeloadable_shifts' => {{ engelsystem_freeloadable_shifts }},
+
+    // local timezone
+    'timezone'                => '{{ engelsystem_timezone }}',
+
+    'shift_sum_formula'       => '{{ engelsystem_shift_sum_formula }}',
+
+    // Voucher calculation
+    'voucher_settings'        => [
+{% for voucher_setting, value in engelsystem_voucher_settings.iteritems()  %}
+'{{ voucher_setting }}' => {{ value }},
+{% endfor %}
+    ],
+
+    // Available locales in /locale/
+    'locales'                 => [
+{% for locale, language in engelsystem_locales.iteritems() %}
+'{{ locale }}' => '{{ language }}',
+{% endfor %}
+    ],
+
+    'default_locale' => '{{ engelsystem_api_key }}',
+
+    // Available T-Shirt sizes, set value to null if not available
+    'tshirt_sizes'   => [
+        ''     => _('Please select...'),
+{% for size_short, size in engelsystem_tshirt_sizes.iteritems() %}
+'{{ size_short }}' => '{{ size }}',
+{% endfor %}
+    ],
+];
+
