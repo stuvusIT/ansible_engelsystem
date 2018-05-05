@@ -1,25 +1,20 @@
+---
 galaxy_info:
-  author: Markus Mroch (Mr. Pi)
-  description: Set up an Engelsystem for managing helpers
-  company: Stuvus
+  author: Insert author(s) here
+  description: Insert description here
+  company: stuvus (https://stuvus.uni-stuttgart.de)
 
-  license: BSD
+  license: CC-BY-SA
 
-  min_ansible_version: 2.0
+  min_ansible_version: 2.4
 
   platforms:
     - name: Ubuntu
       versions:
-        - yakkety
-    - name: Debian
-      versions:
-        - wheezy
+        - xenial
+        - bionic
 
   galaxy_tags:
-    - engelsystem
-    - helper
-    - php
-    - nginx
-    - mysql
+    - Insert ansible galaxy tags here
 
 dependencies: []
