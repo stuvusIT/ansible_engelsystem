@@ -5,7 +5,10 @@
 
 - name: Install required packages
   apt:
-    name: "composer"
+    name: "{{ item }}"
+  with_items:
+    - composer
+    - python-mysqldb
 
 - name: Create install folder
   file:
