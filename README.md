@@ -15,7 +15,7 @@ This role requires the [php-fpm role](https://github.com/stuvusIT/php-fpm), the 
 |---------------------------------------|:------------------------------------------------------------:|------------------------------------------------------------------------|
 | `engelsystem_user`                    | `www-data`                                                   | User under which the files for the engelsystem should be held          |
 | `engelsystem_group`                   | `www-data`                                                   | Group under which the files for the engelsystem should be held         |
-| `engelsystem_install_path`            | `/opt/engelsystem`                                           | Path where the engelsystem should be install to                        |
+| `engelsystem_install_path`            | `/opt/engelsystem`                                           | Path where the engelsystem should be installed to                        |
 | `engelsystem_version`                 | `master`                                                     | Version which should be checkout during the installation               |
 | `engelsystem_mysql_host`              | `localhost`                                                  | Host address where the mysql database runs                             |
 | `engelsystem_mysql_user`              | `engelsystem`                                                | User for the mysql instance                                            |
@@ -40,7 +40,7 @@ This role requires the [php-fpm role](https://github.com/stuvusIT/php-fpm), the 
 | `engelsystem_shift_sum_formula`       | `'SUM(\`end\` - \`start\`)'`                                 | SQL Formula used to calculate shift weights                            |
 | `engelsystem_default_locale`          | `'de_DE.UTF-8'`                                              | Default locale to use for each user                                    |
 | `engelsystem_tshirt_sizes`            | [See the defaults.yml](defaults/main.yml)                    | Dict of tshirt sizes                                                   |
-| `engelsystem_themes`                  | [See the defaults.yml](defaults/main.yml)                    | List of avaliable themes                                               |
+| `engelsystem_themes`                  | [See the defaults.yml](defaults/main.yml)                    | List of available themes                                               |
 | `engelsystem_voucher_settings`        | [See the defaults.yml](defaults/main.yml)                    | Dict with voucher settings                                             |
 | `engelsystem_locales`                 | [See the defaults.yml](defaults/main.yml)                    | Dict with locales mapped to language                                   |
 
