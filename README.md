@@ -28,10 +28,10 @@ This role requires the [php-fpm role](https://github.com/stuvusIT/php-fpm), the 
 | `engelsystem_contact_email`           | `contact@engelsystem.de`                                     | Contact email address, linked on every page                            |
 | `engelsystem_no_reply_email`          | `noreply@engelsystem.de`                                     | From address of all emails                                             |
 | `engelsystem_theme`                   | `1`                                                          | Default theme, 1=style1.css                                            |
-| `engelsystem_display_news`            | `6`                                                          | Number of News shown on one site                                       |
+| `engelsystem_display_news`            | `6`                                                          | Number of news shown on one site                                       |
 | `engelsystem_registration_enabled`    | `false`                                                      | Users are able to sign up                                              |
 | `engelsystem_signup_requires_arrival` | `false`                                                      | Only arrived angels can sign up for shifts                             |
-| `engelsystem_last_unsubscribe`        | `24`                                                         | Number of hours before a shit where it is still possible to unregister |
+| `engelsystem_last_unsubscribe`        | `24`                                                         | Number of hours before a shift where it is still possible to unregister |
 | `engelsystem_crypt_alg`               | `'$6$rounds=5000'`                                           | Crypto Algorithm used for crypt                                        |
 | `engelsystem_min_password_length`     | `6`                                                          | Minimum number of characters for a password                            |
 | `engelsystem_enable_tshirt_size`      | `true`                                                       | Enable to ask angels during singup for their tshirt size               |
