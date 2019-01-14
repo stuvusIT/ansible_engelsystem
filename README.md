@@ -1,10 +1,11 @@
 # Wordpress ansible
 
-This role deploys an engelsystem instance 
+This role deploys an engelsystem instance.
 
 
 ## Requirements
 
+Ubuntu 16.04 or newer.
 This role requires the [php-fpm role](https://github.com/stuvusIT/php-fpm), the [nginx role](https://github.com/stuvusIT/nginx) and the [maria db role](https://github.com/stuvusIT/mariadb)
 
 ## Role Variables
