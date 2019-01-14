@@ -2,13 +2,13 @@
 - name: Add composer repository
   apt_repository:
     repo: ppa:jbboehr/composer
+  when: ansible_distribution_release == "xenial"
 
 - name: Install required packages
   apt:
-    name: "{{ item }}"
-  with_items:
-    - composer
-    - python-mysqldb
+    name:
+      - composer
+      - python-mysqldb
 
 - name: Create install folder
   file:

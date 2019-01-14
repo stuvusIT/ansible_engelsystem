@@ -74,14 +74,14 @@ return [
 
     // Voucher calculation
     'voucher_settings'        => [
-{% for voucher_setting, value in engelsystem_voucher_settings.iteritems()  %}
+{% for voucher_setting, value in engelsystem_voucher_settings.items()  %}
 '{{ voucher_setting }}' => {{ value }},
 {% endfor %}
     ],
 
     // Available locales in /locale/
     'locales'                 => [
-{% for locale, language in engelsystem_locales.iteritems() %}
+{% for locale, language in engelsystem_locales.items() %}
 '{{ locale }}' => '{{ language }}',
 {% endfor %}
     ],
@@ -91,7 +91,7 @@ return [
     // Available T-Shirt sizes, set value to null if not available
     'tshirt_sizes'   => [
         ''     => _('Please select...'),
-{% for size_short, size in engelsystem_tshirt_sizes.iteritems() %}
+{% for size_short, size in engelsystem_tshirt_sizes.items() %}
 '{{ size_short }}' => '{{ size }}',
 {% endfor %}
     ],
