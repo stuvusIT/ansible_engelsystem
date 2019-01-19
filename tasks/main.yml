@@ -9,6 +9,8 @@
     name:
       - composer
       - python-mysqldb
+      - php-xml
+      - php-mbstring
 
 - name: Create install folder
   file:
