@@ -50,8 +50,9 @@
     password: "{{ engelsystem_mysql_password }}"
     priv: '{{ engelsystem_mysql_database }}.*:ALL,GRANT'
     state: present
+  no_log: True
 
-- name: Import sql files
+- name: Import SQL files
   mysql_db:
     state: import
     name: "{{ engelsystem_mysql_database }}"
