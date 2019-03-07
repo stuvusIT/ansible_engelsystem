@@ -1,74 +1,144 @@
 ---
-- name: Add composer repository
+- name: Add apt keys
+  apt_key:
+    url: "{{ item }}"
+  loop:
+    - https://dl.yarnpkg.com/debian/pubkey.gpg
+    - https://deb.nodesource.com/gpgkey/nodesource.gpg.key
+    - https://packages.sury.org/php/apt.gpg
+
+- name: Add newer yarn repository
   apt_repository:
-    repo: ppa:jbboehr/composer
-  when: ansible_distribution_release == "xenial"
+    repo: deb https://dl.yarnpkg.com/debian/ stable main
+    filename: yarn
+
+- name: Add newer PHP repository
+  apt_repository:
+    repo: "deb https://packages.sury.org/php/ {{ ansible_distribution_release }} main"
+    filename: sury
+
+- name: Add newer Node repository
+  apt_repository:
+    repo: "deb https://deb.nodesource.com/node_11.x {{ ansible_distribution_release }} main"
+    filename: node
 
 - name: Install required packages
   apt:
     name:
       - composer
-      - python-mysqldb
-      - php-xml
+      - php-json
       - php-mbstring
+      - php-mysql
+      - php-php-gettext
+      - php-xml
+      - python-mysqldb
+      - yarn
+
+# Ugly hack, not needed after Composer 1.6.0
+- name: Fix Composer
+  command: sed -i '286s/continue/break/g' /usr/share/php/Composer/DependencyResolver/RuleSetGenerator.php
+  args:
+    warn: false
+  changed_when: false
+  when: "ansible_distribution_release == 'stretch'"
 
 - name: Create install folder
   file:
     path: "{{ engelsystem_install_path }}"
     state: directory
-    owner: "{{ engelsystem_user }}"
-    group: "{{ engelsystem_group }}"
+    owner: root
+    group: root
     mode: 0755
 
 - name: Clone repository
   git:
-    repo: 'https://github.com/engelsystem/engelsystem.git'
+    repo: "{{ engelsystem_repo }}"
     dest: "{{ engelsystem_install_path }}"
     depth: 1
     update: true
     version: "{{ engelsystem_version }}"
-  become_user: "{{ engelsystem_user }}"
+  register: git
 
-- name: Run composer install
+- name: Install Composer dependencies
   composer:
     command: install
     working_dir: "{{ engelsystem_install_path }}"
-    no_dev: true
 
-- name: Run composer dump-autoload
-  composer:
-    command: dump-autoload
-    working_dir: "{{ engelsystem_install_path }}"
+- name: Install yarn dependencies
+  command:
+    cmd: yarn
+    chdir: "{{ engelsystem_install_path }}"
+  register: deps
+  changed_when: "'Already up-to-date' not in deps.stdout"
 
-- name: Create a new database with name '{{ engelsystem_mysql_database }}'
+- name: Run yarn build
+  command:
+    cmd: yarn build
+    chdir: "{{ engelsystem_install_path }}"
+  changed_when: false # No output that shows whether it's changed
+  when: deps.changed or git.changed
+
+- name: Grant write permissions
+  file:
+    path: "{{ engelsystem_install_path }}/{{ item }}"
+    owner: "{{ engelsystem_user }}"
+    group: "{{ engelsystem_group }}"
+    recurse: true
+  loop:
+    - import
+    - storage
+
+- name: Create MariaDB database
   mysql_db:
     name: "{{ engelsystem_mysql_database }}"
-    state: present
+    encoding: "utf8"
   register: database_created
 
-- name: Create mariadb user
+- name: Create MariaDB user
   mysql_user:
     name: "{{ engelsystem_mysql_user }}"
     password: "{{ engelsystem_mysql_password }}"
     priv: '{{ engelsystem_mysql_database }}.*:ALL,GRANT'
-    state: present
   no_log: True
 
-- name: Import SQL files
-  mysql_db:
-    state: import
-    name: "{{ engelsystem_mysql_database }}"
-    target: "{{ engelsystem_install_path }}/db/{{ item }}.sql"
-  with_items:
-    - install
-    - update
-  when: database_created.changed
+- name: Migrate database
+  command:
+    cmd: bin/migrate
+    chdir: "{{ engelsystem_install_path }}"
+  register: out
+  changed_when: "'Migrating' in out.stdout"
+  when: git.changed
 
-- name: Copy configuration file
+- name: Drop privileges
+  command:
+    cmd: >
+      mysql -h "{{ engelsystem_mysql_host }}"
+      -u "{{ engelsystem_mysql_user }}"
+      -D "{{ engelsystem_mysql_database }}"
+      --execute "delete GroupPrivileges from GroupPrivileges inner join Privileges on GroupPrivileges.privilege_id=Privileges.id where Privileges.name = '{{ item }}'; select ROW_COUNT();"
+  environment:
+    MYSQL_PWD: "{{ engelsystem_mysql_password }}"
+  register: out
+  changed_when: "'0' not in out.stdout"
+  loop: "{{ engelsystem_remove_privs }}"
+
+- name: Set admin password
+  command:
+    cmd: >
+      mysql -h "{{ engelsystem_mysql_host }}"
+      -u "{{ engelsystem_mysql_user }}"
+      -D "{{ engelsystem_mysql_database }}"
+      --execute "update users set password='{{ engelsystem_admin_password }}' where name='admin'; select ROW_COUNT();"
+  environment:
+    MYSQL_PWD: "{{ engelsystem_mysql_password }}"
+  register: out
+  changed_when: "'0' not in out.stdout"
+  when: "engelsystem_admin_password != ''"
+
+- name: Create configuration file
   template:
     src: config.php.j2
     dest: "{{ engelsystem_install_path }}/config/config.php"
-    owner: "{{ engelsystem_user }}"
+    owner: root
     group: "{{ engelsystem_group }}"
-    mode: 0660
-
+    mode: 0640
