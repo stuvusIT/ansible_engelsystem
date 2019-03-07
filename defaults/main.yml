@@ -2,51 +2,11 @@
 engelsystem_user: www-data
 engelsystem_group: www-data
 engelsystem_install_path: /opt/engelsystem
+engelsystem_repo: https://github.com/engelsystem/engelsystem
 engelsystem_version: master
 engelsystem_mysql_host: localhost
 engelsystem_mysql_user: engelsystem
 engelsystem_mysql_database: engelsystem
-engelsystem_api_key: ''
-engelsystem_maintenance: false
-engelsystem_environment: production
-engelsystem_faq_url: https://events.ccc.de/congress/2013/wiki/Static:Volunteers
-engelsystem_contact_email: contact@engelsystem.de
-engelsystem_no_reply_email: noreply@engelsystem.de
-engelsystem_theme: 1
-engelsystem_themes:
-  - 'Engelsystem light'
-  - 'Engelsystem dark'
-  - 'Engelsystem cccamp15'
-  - 'Engelsystem 32c3 (2015)'
-  - 'Engelsystem 33c3 (2016)'
-  - 'Engelsystem 34c3 light (2017)'
-  - 'Engelsystem 34c3 dark (2017)'
-engelsystem_display_news: 6
-engelsystem_registration_enabled: false
-engelsystem_signup_requires_arrival: false
-engelsystem_last_unsubscribe: 24
-engelsystem_crypt_alg: '$6$rounds=5000'
-engelsystem_min_password_length: 6
-engelsystem_enable_tshirt_size: true
-engelsystem_freeloadable_shifts: 2
-engelsystem_timezone: 'Europe/Berlin'
-engelsystem_shift_sum_formula: 'SUM(`end` - `start`)'
-engelsystem_voucher_settings:
-  initial_vouchers: 0
-  shifts_per_voucher: 1
-engelsystem_locales:
-  de_DE.UTF-8: Deutsch
-  en_US.UTF-8: English
-engelsystem_default_locale: 'de_DE.UTF-8'
-engelsystem_tshirt_sizes:
-  S: S
-  S-G: S Girl
-  M: M
-  M-G: M Girl
-  L: L
-  L-G: L Girl
-  XL: XL
-  XL-G: XL Girl
-  2XL: 2XL
-  3XL: 3XL
-  4XL: 4XL
+engelsystem_remove_privs: []
+engelsystem_admin_password: "$6$rounds=5000$hjXbIhoRTH3vKiRa$Wl2P2iI5T9iRR.HHu/YFHswBW0WVn0yxCfCiX0Keco9OdIoDK6bIAADswP6KvMCJSwTGdV8PgA8g8Xfw5l8BD1"
+engelsystem_config: {}
