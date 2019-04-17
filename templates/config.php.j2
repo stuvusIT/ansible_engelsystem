@@ -29,7 +29,7 @@ return [
     ],
 
     {% for key, value in engelsystem_config.items() %}
-    '{{ key }}' => {{ insert_var(value) }},
+    {{ key | to_json }} => {{ insert_var(value) }},
     {% endfor %}
 ];
 
