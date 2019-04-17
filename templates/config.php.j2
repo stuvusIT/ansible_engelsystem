@@ -23,11 +23,11 @@
 
 return [
     // MySQL-Connection Settings
-    'database'                => [
-        'host'     => env('MYSQL_HOST', '{{ engelsystem_mysql_host }}'),
-        'username' => env('MYSQL_USER', '{{ engelsystem_mysql_user }}'),
-        'password' => env('MYSQL_PASSWORD', '{{ engelsystem_mysql_password }}'),
-        'database' => env('MYSQL_DATABASE', '{{ engelsystem_mysql_database }}'),
+    "database"                => [
+        "host"     => env("MYSQL_HOST", {{ engelsystem_mysql_host | to_json }}),
+        "username" => env("MYSQL_USER", {{ engelsystem_mysql_user | to_json }}),
+        "password" => env("MYSQL_PASSWORD", {{ engelsystem_mysql_password | to_json }}),
+        "database" => env("MYSQL_DATABASE", {{ engelsystem_mysql_database | to_json }}),
     ],
 
     {% for key, value in engelsystem_config.items() %}
