@@ -9,7 +9,7 @@
 		{#- dict -#}
 		[ {% for k,v in var.items() %}'{{ k }}' => {{ insert_var(v) }}, {# Note: trailing commas in dicts are legal #}{% endfor %} ]
 	{%- elif var | type == "unicode" or var | type == "AnsibleUnsafeText" or var | type == "str" -%}
-		'{{ var }}'
+		{{ var | to_json }}
 	{%- else -%}
 		{# number or unhandled case -> write verbatim -#}
 		{{ var }}
