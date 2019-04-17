@@ -1,3 +1,25 @@
+{% macro insert_var(var) -%}{#- Formats a variable for inserting it into PHP -#}
+	{%- if var | type == "bool" -%}
+		{#- bool -#}
+		{{ var | bool | lower }}
+	{%- elif var | type == "list" -%}
+		{#- list -#}
+		[ {% for item in var %}{{ insert_var(item) }}, {# Note: trailing commas in lists are legal #}{% endfor %} ]
+	{%- elif var | type == "dict" -%}
+		{#- dict -#}
+		[ {% for k,v in var.items() %}'{{ k }}' => {{ insert_var(v) }}, {# Note: trailing commas in dicts are legal #}{% endfor %} ]
+	{%- elif var | type == "unicode" or var | type == "AnsibleUnsafeText" or var | type == "str" -%}
+		{%- if (var | string).startswith(':nq:') -%}
+			{#- special instruction that should not be quoted -#}
+			{{ var[4:] }}
+		{%- else -%}
+			'{{ var }}'
+		{% endif %}
+	{%- else -%}
+		{# number or unhandled case -> write verbatim -#}
+		{{ var }}
+	{%- endif -%}
+{%- endmacro -%}
 <?php
 
 // {{ ansible_managed }}
@@ -11,8 +33,8 @@ return [
         'database' => env('MYSQL_DATABASE', '{{ engelsystem_mysql_database }}'),
     ],
 
-    {% for k, v in engelsystem_config.items() %}
-    '{{ k }}' => {{ v }},
+    {% for key, value in engelsystem_config.items() %}
+    '{{ key }}' => {{ insert_var(value) }},
     {% endfor %}
 ];
 
