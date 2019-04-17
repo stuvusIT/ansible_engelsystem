@@ -10,7 +10,7 @@
 		[ {% for item in var %}{{ insert_var(item) }}, {# Note: trailing commas in lists are legal #}{% endfor %} ]
 	{%- elif var | type == "dict" -%}
 		{#- dict -#}
-		[ {% for k,v in var.items() %}'{{ k }}' => {{ insert_var(v) }}, {# Note: trailing commas in dicts are legal #}{% endfor %} ]
+		[ {% for k,v in var.items() %}{{ k | to_json }} => {{ insert_var(v) }}, {# Note: trailing commas in dicts are legal #}{% endfor %} ]
 	{%- elif var | type == "unicode" or var | type == "AnsibleUnsafeText" or var | type == "str" -%}
 		{{ var | to_json }}
 	{%- else -%}
