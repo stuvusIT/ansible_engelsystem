@@ -9,12 +9,7 @@
 		{#- dict -#}
 		[ {% for k,v in var.items() %}'{{ k }}' => {{ insert_var(v) }}, {# Note: trailing commas in dicts are legal #}{% endfor %} ]
 	{%- elif var | type == "unicode" or var | type == "AnsibleUnsafeText" or var | type == "str" -%}
-		{%- if (var | string).startswith(':nq:') -%}
-			{#- special instruction that should not be quoted -#}
-			{{ var[4:] }}
-		{%- else -%}
-			'{{ var }}'
-		{% endif %}
+		'{{ var }}'
 	{%- else -%}
 		{# number or unhandled case -> write verbatim -#}
 		{{ var }}
