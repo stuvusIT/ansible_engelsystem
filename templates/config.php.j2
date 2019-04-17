@@ -1,18 +1,37 @@
+{% macro insert_var(var) -%}{#- Formats a variable for inserting it into PHP -#}
+	{%- if var | type == "bool" -%}
+		{#- bool -#}
+		{{ var | bool | lower }}
+	{%- elif var | type == "int" or var | type == "float" -%}
+		{#- numeric -#}
+		{{ var }}
+	{%- elif var | type == "list" -%}
+		{#- list -#}
+		[ {% for item in var %}{{ insert_var(item) }}, {# Note: trailing commas in lists are legal #}{% endfor %} ]
+	{%- elif var | type == "dict" -%}
+		{#- dict -#}
+		[ {% for k,v in var.items() %}{{ k | to_json }} => {{ insert_var(v) }}, {# Note: trailing commas in dicts are legal #}{% endfor %} ]
+	{%- elif var | type == "unicode" or var | type == "AnsibleUnsafeText" or var | type == "str" -%}
+		{{ var | to_json }}
+	{%- else -%}
+		{{ "Your engelsystem_config contains an invalid value"/0 }}
+	{%- endif -%}
+{%- endmacro -%}
 <?php
 
 // {{ ansible_managed }}
 
 return [
     // MySQL-Connection Settings
-    'database'                => [
-        'host'     => env('MYSQL_HOST', '{{ engelsystem_mysql_host }}'),
-        'username' => env('MYSQL_USER', '{{ engelsystem_mysql_user }}'),
-        'password' => env('MYSQL_PASSWORD', '{{ engelsystem_mysql_password }}'),
-        'database' => env('MYSQL_DATABASE', '{{ engelsystem_mysql_database }}'),
+    "database"                => [
+        "host"     => env("MYSQL_HOST", {{ engelsystem_mysql_host | to_json }}),
+        "username" => env("MYSQL_USER", {{ engelsystem_mysql_user | to_json }}),
+        "password" => env("MYSQL_PASSWORD", {{ engelsystem_mysql_password | to_json }}),
+        "database" => env("MYSQL_DATABASE", {{ engelsystem_mysql_database | to_json }}),
     ],
 
-    {% for k, v in engelsystem_config.items() %}
-    '{{ k }}' => {{ v }},
+    {% for key, value in engelsystem_config.items() %}
+    {{ key | to_json }} => {{ insert_var(value) }},
     {% endfor %}
 ];
 
