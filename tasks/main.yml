@@ -54,7 +54,7 @@
   git:
     repo: "{{ engelsystem_repo }}"
     dest: "{{ engelsystem_install_path }}"
-    depth: 1
+    depth: 50
     update: true
     version: "{{ engelsystem_version }}"
   register: git
