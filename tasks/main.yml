@@ -63,6 +63,12 @@
   composer:
     command: install
     working_dir: "{{ engelsystem_install_path }}"
+    
+- name: Update Composer dependencies
+  composer:
+    command: update
+    working_dir: "{{ engelsystem_install_path }}"
+  when: git.changed
 
 - name: Install yarn dependencies
   command:
