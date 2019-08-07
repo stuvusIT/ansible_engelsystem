@@ -32,6 +32,7 @@
       - php-php-gettext
       - php-xml
       - python-mysqldb
+      - python3-mysqldb
       - yarn
 
 # Ugly hack, not needed after Composer 1.6.0
