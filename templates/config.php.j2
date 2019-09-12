@@ -1,5 +1,7 @@
 {% macro insert_var(var) -%}{#- Formats a variable for inserting it into PHP -#}
-	{%- if var | type == "bool" -%}
+	{%- if var is none -%}
+		NULL
+	{%- elif var | type == "bool" -%}
 		{#- bool -#}
 		{{ var | bool | lower }}
 	{%- elif var | type == "int" or var | type == "float" -%}
