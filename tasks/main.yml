@@ -96,7 +96,7 @@
     - storage
 
 - name: Create MariaDB database
-  mysql_db:
+  community.mysql.mysql_db:
     name: "{{ engelsystem_mysql_database }}"
     encoding: "utf8"
   register: database_created
